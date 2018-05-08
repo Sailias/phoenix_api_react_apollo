@@ -22,6 +22,11 @@ config :logger, :console,
   format: "$time $metadata[$level] $message\n",
   metadata: [:request_id]
 
+
+config :api, Api.Accounts.Guardian,
+       issuer: "api",
+       secret_key: "x1hya5bbfe6A86KuYPQPP6mKWAR9BT6lA7g5G7UgxKS7Mc+4pL/OaqLCpXeNzi/l"
+
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{Mix.env}.exs"

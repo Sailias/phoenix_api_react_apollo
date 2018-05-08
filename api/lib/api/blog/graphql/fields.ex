@@ -8,9 +8,9 @@ defmodule Api.Blog.Graphql.Fields do
   object :blog_fields do
 
     field :posts, list_of(:post) do
-
       resolve &PostResolver.list_posts/3
     end
+    
   end
 
 end

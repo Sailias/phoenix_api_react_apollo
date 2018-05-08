@@ -4,6 +4,7 @@ defmodule Api.Accounts.Graphql.Types do
   object :user do
     field :id, :id
     field :email, :string
+    field :token, :string
   end
 
 end
