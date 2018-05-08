@@ -22,7 +22,6 @@ defmodule Api.Blog.Resolvers.PostResolver do
       error -> {:error, "unauthorized"}
     end
     |> Api.Web.Graphql.Helpers.payload_formatter()
-    |> IO.inspect()
   end
 
 end
