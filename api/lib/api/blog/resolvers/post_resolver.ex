@@ -24,4 +24,19 @@ defmodule Api.Blog.Resolvers.PostResolver do
     |> Api.Web.Graphql.Helpers.payload_formatter()
   end
 
+  def update_post(_parent, args, %{ context: context }) do
+    Blog.find_post(args[:id])
+    |> case do
+      nil -> {:error, "Post not found"}
+      post ->
+        with :ok <- Bodyguard.permit(Blog, :update_post, context.current_user, post)
+        do
+          Blog.update_post(post, args)
+        else
+          error -> {:error, "unauthorized"}
+        end
+    end
+    |> Api.Web.Graphql.Helpers.payload_formatter()
+  end
+
 end

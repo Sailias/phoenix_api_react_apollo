@@ -17,4 +17,10 @@ defmodule Api.Blog.Post do
     |> validate_required([:user_id, :title, :body])
   end
   
+  def update_changeset(post, attrs) do
+    post
+    |> cast(attrs, [:title, :body])
+    |> validate_required([:title, :body])
+  end
+
 end
