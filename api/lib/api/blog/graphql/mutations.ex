@@ -14,7 +14,7 @@ defmodule Api.Blog.Graphql.Mutations do
       arg :title, :string
       arg :body, :string
 
-      resolve &PostResolver.create_post/3
+      resolve &PostResolver.create_post/2
     end
 
     field :update_post, :post_payload do
@@ -22,7 +22,7 @@ defmodule Api.Blog.Graphql.Mutations do
       arg :title, :string
       arg :body, :string
 
-      resolve &PostResolver.update_post/3
+      resolve &PostResolver.update_post/2
     end
 
   end

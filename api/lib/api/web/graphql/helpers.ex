@@ -9,5 +9,4 @@ defmodule Api.Web.Graphql.Helpers do
       error -> {:ok, convert_to_payload(error)}
     end
   end
-
 end

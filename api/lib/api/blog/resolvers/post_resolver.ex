@@ -7,34 +7,34 @@ defmodule Api.Blog.Resolvers.PostResolver do
     Blog.Post
   }
 
-  def list_posts(_parent, _args, %{ context: context }) do
-    query = preload(Post, :user)
-    { :ok, Repo.all(query) }
+  def list_posts(_args, %{ context: context }) do
+    { :ok, Repo.all(Post) }
   end
 
-  def create_post(_parent, args, %{ context: context }) do
+  def find_post(args, %{ context: context }) do
+    { :ok, Repo.get(Post, args[:id]) }
+  end
+
+  def create_post(args, %{ context: context }) do
     with :ok <- Bodyguard.permit(Blog, :create_post, context.current_user)
     do
-      args 
+      args
       |> Map.put(:user_id, context.current_user.id)
       |> Blog.create_post()
     else
-      error -> {:error, "unauthorized"}
+      error -> {:error, %Kronky.ValidationMessage{code: 403, message: "Forbidden"}}
     end
     |> Api.Web.Graphql.Helpers.payload_formatter()
   end
 
-  def update_post(_parent, args, %{ context: context }) do
-    Blog.find_post(args[:id])
-    |> case do
-      nil -> {:error, "Post not found"}
-      post ->
-        with :ok <- Bodyguard.permit(Blog, :update_post, context.current_user, post)
-        do
-          Blog.update_post(post, args)
-        else
-          error -> {:error, "unauthorized"}
-        end
+  def update_post(args, %{ context: context }) do
+    with post when not is_nil(post) <- Repo.get(Post, args[:id]),
+         :ok <- Bodyguard.permit(Blog, :update_post, context.current_user, post)
+    do
+      Blog.update_post(post, args)
+    else
+      nil -> {:error, %Kronky.ValidationMessage{code: 404, message: "post not found"}}
+      {:error, :unauthorized} -> {:error, %Kronky.ValidationMessage{code: 403, message: "Forbidden"}}
     end
     |> Api.Web.Graphql.Helpers.payload_formatter()
   end

@@ -8,10 +8,6 @@ defmodule Api.Blog do
 
   defdelegate authorize(action, user, params), to: Policy
 
-  def find_post(id) do
-    Repo.get(Post, id)
-  end
-
   def create_post(attrs) do
     changeset = Post.changeset(%Post{}, attrs)
     Repo.insert(changeset)

@@ -12,12 +12,13 @@ defmodule Api.Web.Graphql.Context do
   end
   
   def build_context(conn) do
-    { current_user, token } = 
+    current_user =
       with ["Bearer " <> token] <- get_req_header(conn, "authorization"),
-           {:ok, current_user} <- authorize(token) do
-        { current_user, token }
+           {:ok, current_user} <- authorize(token) 
+      do
+        current_user
       else
-        _ -> { %{}, nil }
+        _error -> %{}
       end
 
     %{ current_user: current_user }

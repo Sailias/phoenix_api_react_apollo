@@ -5,10 +5,6 @@ defmodule Api.Accounts do
     Accounts.User
   }
 
-  def find_user(id) do
-    Repo.get(User, id)
-  end
-
   def create_user(attrs \\ %{}) do
     changeset = User.changeset(%User{}, attrs)
     Repo.insert(changeset)
